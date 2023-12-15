@@ -81,7 +81,7 @@ public class EmployeePayrollDBService {
         employeePayrollDataStatement=connection.prepareStatement(sql);
 
     } catch (SQLException e) {
-        throw new RuntimeException(e);
+        e.printStackTrace();
     }
     }
     //prepared statement
@@ -102,4 +102,5 @@ public class EmployeePayrollDBService {
         return 0;
     }
 }
+
 
