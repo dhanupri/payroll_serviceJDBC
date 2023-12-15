@@ -14,23 +14,23 @@ public class EmployeePayrollDBService {
         }
         return employeePayrollDBService;
     }
-    private Connection getConnection() throws SQLException {
-        String jdbcURL = "jdbc:mysql://localhost:3306/employee_payroll_service_?useSSL=false";
-        String userName = "root";
-        String password = "Rohitsharma45";
-        Connection connection;
-        System.out.println("Connecting to database : " +jdbcURL);
-        connection = DriverManager.getConnection(jdbcURL,userName,password);
-        System.out.println("Connection is successful!!!" + connection);
-        return connection;
-    }
+//    private Connection getConnection() throws SQLException {
+//        String jdbcURL = "jdbc:mysql://localhost:3306/employee_payroll_service_?useSSL=false";
+//        String userName = "root";
+//        String password = "Rohitsharma45";
+//        Connection connection;
+//        System.out.println("Connecting to database : " +jdbcURL);
+//        connection = DriverManager.getConnection(jdbcURL,userName,password);
+//        System.out.println("Connection is successful!!!" + connection);
+//        return connection;
+//    }
     //read data
     public List<EmployeePayrollData> readData(){
-        //uc2
+        //uc4
         String sql="SELECT * FROM employee_payroll;";
         List<EmployeePayrollData> employeePayrollList=new ArrayList<>();
         try {
-            Connection connection=this.getConnection();
+            Connection connection=sql_con.getCon();
             Statement statement=connection.createStatement();
             ResultSet result=statement.executeQuery(sql);
             while (result.next()){
@@ -75,7 +75,7 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
     public void  insert(EmployeePayrollData emp) throws SQLException {
-        Connection connection=this.getConnection();
+        Connection connection=sql_con.getCon();
         PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?)");
         ps.setInt(1, emp.getId());
         ps.setString(2, emp.getName());
@@ -88,7 +88,7 @@ public class EmployeePayrollDBService {
     }
     private void prepareStatementForEmployeePayrollData() {
     try {
-        Connection connection=this.getConnection();
+        Connection connection=sql_con.getCon();
         String sql="SELECT * FROM employee_payroll WHERE name=?;";
         employeePayrollDataStatement=connection.prepareStatement(sql);
 
@@ -104,7 +104,7 @@ public class EmployeePayrollDBService {
     //normal statement
     private int updateEmployeedataUsingStatement(String name,int salary) throws SQLException {
         String sql=String.format("update employee_payroll set salary=%d where name='%s';",salary,name);
-        try (Connection connection=this.getConnection()){
+        try (Connection connection=sql_con.getCon()){
             Statement statement=connection.createStatement();
             return statement.executeUpdate(sql);
         }
@@ -112,6 +112,23 @@ public class EmployeePayrollDBService {
             e.printStackTrace();
         }
         return 0;
+    }
+    public static void retrive_display() {
+        //uc4 retrive all rows from table
+        try {
+            Connection connection = sql_con.getCon();
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM employee_payroll;");
+            ResultSet resultSet=ps.executeQuery();
+            while (resultSet.next()){
+                int id=resultSet.getInt("id");
+                String name=resultSet.getString("name");
+                int salary=resultSet.getInt("salary");
+                java.util.Date date=resultSet.getDate("start");
+               System.out.println("ID:"+id+",Name:"+name+",salary:"+salary+",Date:"+date);
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
 

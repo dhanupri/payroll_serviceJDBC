@@ -29,6 +29,7 @@ public class EmployeePayrollService {
         Scanner consoleInputReader = new Scanner(System.in);
         employeePayrollService.readEmployeePayrollData(consoleInputReader);
         employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
+        EmployeePayrollDBService.retrive_display();
     }
     //write employee payroll
     public void writeEmployeePayrollData(IOService ioService) {
