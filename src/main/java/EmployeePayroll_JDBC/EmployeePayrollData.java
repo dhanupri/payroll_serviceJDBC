@@ -10,6 +10,13 @@ public class EmployeePayrollData {
     public LocalDate startDate;
     public Date date;
 
+    public EmployeePayrollData() {
+        this.id=id;
+        this.name=name;
+        this.salary=salary;
+        this.startDate=startDate;
+    }
+
 
     public int getId() {
         return id;

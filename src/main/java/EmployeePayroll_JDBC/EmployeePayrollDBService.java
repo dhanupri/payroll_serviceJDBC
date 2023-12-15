@@ -14,16 +14,6 @@ public class EmployeePayrollDBService {
         }
         return employeePayrollDBService;
     }
-//    private Connection getConnection() throws SQLException {
-//        String jdbcURL = "jdbc:mysql://localhost:3306/employee_payroll_service_?useSSL=false";
-//        String userName = "root";
-//        String password = "Rohitsharma45";
-//        Connection connection;
-//        System.out.println("Connecting to database : " +jdbcURL);
-//        connection = DriverManager.getConnection(jdbcURL,userName,password);
-//        System.out.println("Connection is successful!!!" + connection);
-//        return connection;
-//    }
     //read data
     public List<EmployeePayrollData> readData(){
         //uc4
@@ -74,6 +64,7 @@ public class EmployeePayrollDBService {
         }
         return employeePayrollList;
     }
+    //insert values into table
     public void  insert(EmployeePayrollData emp) throws SQLException {
         Connection connection=sql_con.getCon();
         PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?)");
@@ -86,6 +77,51 @@ public class EmployeePayrollDBService {
         connection.close();
 
     }
+    //retrive based on name
+    public static List<EmployeePayrollData> retrive_By_name(String name){
+        List<EmployeePayrollData> data=new ArrayList<>();
+        EmployeePayrollData data1=new EmployeePayrollData();
+        try {
+            Connection connection=sql_con.getCon();
+            PreparedStatement ps=connection.prepareStatement("SELECT * FROM employee_payroll WHERE name=?");
+            ps.setString(1,name);
+            ResultSet resultSet=ps.executeQuery();
+            while (resultSet.next()){
+                data1.setSalary(resultSet.getInt("salary"));
+                data.add(data1);
+            }
+            connection.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return data;
+    }
+    //retrive the employee payroll data between an range
+    public static void retrive_between_range(Date date){
+        List<EmployeePayrollData> data=new ArrayList<>();
+        EmployeePayrollData data1=new EmployeePayrollData();
+        try {
+            Connection connection=sql_con.getCon();
+            assert connection != null;
+            PreparedStatement ps=connection.prepareStatement("SELECT * FROM employee_payroll WHERE start BETWEEN CAST(? AS DATE) AND DATE(NOW())");
+            ps.setString(1, String.valueOf(date));
+            ResultSet resultSet=ps.executeQuery();
+            while (resultSet.next()){
+                int id=resultSet.getInt("id");
+                String name=resultSet.getString("name");
+                int salary=resultSet.getInt("salary");
+                java.util.Date date1=resultSet.getDate("start");
+                System.out.println("ID:"+id+",Name:"+name+",salary:"+salary+",Date:"+date1);
+            }
+            connection.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    //using prepared statement
     private void prepareStatementForEmployeePayrollData() {
     try {
         Connection connection=sql_con.getCon();

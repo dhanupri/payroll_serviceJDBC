@@ -27,10 +27,46 @@ public class EmployeePayrollService {
         ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
         Scanner consoleInputReader = new Scanner(System.in);
-        employeePayrollService.readEmployeePayrollData(consoleInputReader);
+        System.out.println("1.insert values"+
+                "2.retrive all data"+
+                "3.retrive based on specific condition :(yes/no)");
+        int res=consoleInputReader.nextInt();
+        switch (res){
+            case 1:
+                employeePayrollService.readEmployeePayrollData(consoleInputReader);
+                break;
+            case 2:
+                EmployeePayrollDBService.retrive_display();
+                break;
+            case 3:
+                System.out.println("1.based on name"+
+                        "2.based on date");
+                int n=consoleInputReader.nextInt();
+                switch (n){
+                    case 1:
+                        System.out.println("Enter the name :");
+                        String name=consoleInputReader.next();
+                        List<EmployeePayrollData> data=EmployeePayrollDBService.retrive_By_name(name);
+                        for (EmployeePayrollData emp1:data){
+                            System.out.println("ID:"+emp1.id+",Name:"+emp1.name+",salary:"+emp1.salary+",date"+emp1.startDate);
+                        }
+
+                        break;
+                    case 2:
+                        System.out.println("Enter the date");
+                        String date=consoleInputReader.next();
+                        EmployeePayrollDBService.retrive_between_range(java.sql.Date.valueOf(LocalDate.parse(date)));
+                        break;
+                }
+
+        }
+
         employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
-        EmployeePayrollDBService.retrive_display();
+
     }
+
+
+
     //write employee payroll
     public void writeEmployeePayrollData(IOService ioService) {
         if(ioService.equals(IOService.CONSOLE_IO)){
@@ -63,12 +99,10 @@ public class EmployeePayrollService {
 
         System.out.println("Enter Employee ID: ");
         int id = consoleInputReader.nextInt();
-//        consoleInputReader.next();
         System.out.println("Enter Employee Name: ");
         String name = consoleInputReader.next();
         System.out.println("Enter Employee Salary: ");
         int salary = consoleInputReader.nextInt();
-//        consoleInputReader.next();
         System.out.println("Enter the date:");
         String inputDate = consoleInputReader.next();
 
