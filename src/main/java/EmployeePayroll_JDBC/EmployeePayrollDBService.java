@@ -65,7 +65,7 @@ public class EmployeePayrollDBService {
             while(resultSet.next()){
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                double salary = resultSet.getDouble("salary");
+                int salary = resultSet.getInt("salary");
                 LocalDate startDate = resultSet.getDate("start").toLocalDate();
                 employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
             }
@@ -73,6 +73,18 @@ public class EmployeePayrollDBService {
             e.printStackTrace();
         }
         return employeePayrollList;
+    }
+    public void  insert(EmployeePayrollData emp) throws SQLException {
+        Connection connection=this.getConnection();
+        PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?)");
+        ps.setInt(1, emp.getId());
+        ps.setString(2, emp.getName());
+        ps.setInt(3,emp.getSalary());
+        LocalDate d=emp.getStartDate();
+        ps.setDate(4, Date.valueOf(d));
+        int resultSet=ps.executeUpdate();
+        connection.close();
+
     }
     private void prepareStatementForEmployeePayrollData() {
     try {

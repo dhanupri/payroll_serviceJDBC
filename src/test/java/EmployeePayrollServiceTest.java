@@ -12,9 +12,9 @@ public class EmployeePayrollServiceTest {
     @Test
     public void EmployeesWhenWrittenToFileShouldMatchEmployeeEntries() throws IOException {
         EmployeePayrollData[] arraysOfEmployees = {
-                new EmployeePayrollData(1, "Jeff Bezos", 100000.0),
-                new EmployeePayrollData(2, "Bill Gates", 200000.0),
-                new EmployeePayrollData(3, "Elon Mask", 300000.0),
+                new EmployeePayrollData(1, "Jeff Bezos", 100000),
+                new EmployeePayrollData(2, "Bill Gates", 200000),
+                new EmployeePayrollData(3, "Elon Mask", 300000),
         };
         EmployeePayrollService employeePayrollService;
         employeePayrollService = new EmployeePayrollService(Arrays.asList(arraysOfEmployees));

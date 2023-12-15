@@ -2,12 +2,18 @@ package EmployeePayroll_JDBC;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
 public class EmployeePayrollService {
     public enum IOService {CONSOLE_IO, FILE_IO, DB_IO, REST_IO}
     private List<EmployeePayrollData> employeePayrollList;
+//    LocalDate date=java.time.LocalDate.now();
     //constructor
     private EmployeePayrollDBService employeePayrollDBService;
     public EmployeePayrollService() {
@@ -17,7 +23,7 @@ public class EmployeePayrollService {
         this();
         this.employeePayrollList = employeePayrollList;
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ParseException {
         ArrayList<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         EmployeePayrollService employeePayrollService = new EmployeePayrollService(employeePayrollList);
         Scanner consoleInputReader = new Scanner(System.in);
@@ -52,14 +58,26 @@ public class EmployeePayrollService {
 
     }
     //read the data
-    public void readEmployeePayrollData(Scanner consoleInputReader) {
+    public void readEmployeePayrollData(Scanner consoleInputReader) throws SQLException, ParseException {
+
         System.out.println("Enter Employee ID: ");
         int id = consoleInputReader.nextInt();
+//        consoleInputReader.next();
         System.out.println("Enter Employee Name: ");
         String name = consoleInputReader.next();
         System.out.println("Enter Employee Salary: ");
-        double salary = consoleInputReader.nextDouble();
-        employeePayrollList.add(new EmployeePayrollData(id, name, salary));
+        int salary = consoleInputReader.nextInt();
+//        consoleInputReader.next();
+        System.out.println("Enter the date:");
+        String inputDate = consoleInputReader.next();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date=dateFormat.parse(inputDate);
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        EmployeePayrollData emp = new EmployeePayrollData(id, name, salary, LocalDate.parse(inputDate));
+        employeePayrollList.add(emp);
+        new EmployeePayrollDBService().insert(emp);
+//        employeePayrollList.add(new EmployeePayrollData(id, name, salary));
     }
     //update employee data
     public void updateEmployeedata(String name,int amt) throws SQLException {
