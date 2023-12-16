@@ -135,7 +135,6 @@ public class EmployeePayrollDBService {
     //prepared statement
     public int updateEmployeedata(String name, int amt) throws SQLException {
         return this.updateEmployeedataUsingStatement(name,amt);
-
     }
     //normal statement
     private int updateEmployeedataUsingStatement(String name,int salary) throws SQLException {
@@ -166,6 +165,31 @@ public class EmployeePayrollDBService {
             throw new RuntimeException(ex);
         }
     }
+//uc6  aggregate function
+    public static void aggregate_function(String gender) {
+        String male;
+        String female;
+        try {
+            Connection connection = sql_con.getCon();
+            PreparedStatement ps = connection.prepareStatement("SELECT ?,SUM(salary) AS total_salary,AVG(salary) AS average_salary, MIN(salary) AS min_salary, MAX(salary) AS max_salary, COUNT(*) AS employee_count FROM employee_payroll GROUP BY gender");
+            ps.setString(1,gender);
+            ResultSet resultSet=ps.executeQuery();
+            while (resultSet.next()){
+                double totalSalary = resultSet.getDouble("total_salary");
+                double averageSalary = resultSet.getDouble("average_salary");
+                double minSalary = resultSet.getDouble("min_salary");
+                double maxSalary = resultSet.getDouble("max_salary");
+                int employeeCount = resultSet.getInt("employee_count");
+                System.out.println("Gender: " + gender + ", Total Salary: " + totalSalary + ", Average Salary: " + averageSalary + ", Min Salary: " + minSalary + ", Max Salary: " + maxSalary + ", Employee Count: " + employeeCount);
+
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+
+
 }
 
 

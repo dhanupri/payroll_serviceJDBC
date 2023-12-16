@@ -60,6 +60,9 @@ public class EmployeePayrollService {
                 }
 
         }
+        System.out.println("Enter the gender:");
+        String gender= String.valueOf(consoleInputReader.next().charAt(0));
+        EmployeePayrollDBService.aggregate_function(gender);
 
         employeePayrollService.writeEmployeePayrollData(IOService.CONSOLE_IO);
 
