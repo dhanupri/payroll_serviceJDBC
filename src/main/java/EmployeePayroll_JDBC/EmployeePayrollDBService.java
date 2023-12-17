@@ -65,8 +65,9 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
     //insert values into table
-    public static void  insert(EmployeePayrollData emp) throws SQLException {
+    public static boolean insert(EmployeePayrollData emp) throws SQLException {
         Connection connection=sql_con.getCon();
+        connection.setAutoCommit(false);
         PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?,?)");
         ps.setInt(1, emp.getId());
         ps.setString(2, emp.getName());
@@ -75,8 +76,31 @@ public class EmployeePayrollDBService {
         ps.setDate(4, Date.valueOf(d));
         ps.setString(5,emp.getGender());
         int resultSet=ps.executeUpdate();
+
+        //calculate payroll details
+        double deductions=0.2*emp.getSalary();
+        double taxPay=emp.getSalary()-deductions;
+        double tax=0.1*taxPay;
+        double netPAy=emp.getSalary()-tax;
+        PreparedStatement ps1 = connection.prepareStatement("INSERT INTO payroll_details (employee_id, salary, deductions, taxable_pay, tax, net_pay) VALUES (?, ?, ?, ?, ?, ?)");
+        ps1.setInt(1,emp.id);
+        ps1.setDouble(2,emp.getSalary());
+        ps1.setDouble(3,deductions);
+        ps1.setDouble(4,taxPay);
+        ps1.setDouble(5,tax);
+        ps1.setDouble(6,netPAy);
+        int payrollresult=ps1.executeUpdate();
+        if((resultSet==1) && (payrollresult==1)){
+            connection.commit();
+            return true;
+
+        }
+        else {
+            connection.rollback();
+        }
         connection.close();
 
+        return false;
     }
     //retrive based on name
     public static List<EmployeePayrollData> retrive_By_name(String name){
