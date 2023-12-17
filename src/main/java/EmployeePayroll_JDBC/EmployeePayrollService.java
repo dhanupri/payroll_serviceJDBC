@@ -109,10 +109,13 @@ public class EmployeePayrollService {
         System.out.println("Enter the date:");
         String inputDate = consoleInputReader.next();
 
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date=dateFormat.parse(inputDate);
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        EmployeePayrollData emp = new EmployeePayrollData(id, name, salary, LocalDate.parse(inputDate));
+        System.out.println("enter the gender");
+        String gender=consoleInputReader.next();
+        EmployeePayrollData emp = new EmployeePayrollData(id, name, salary, LocalDate.parse(inputDate),gender);
         employeePayrollList.add(emp);
         new EmployeePayrollDBService().insert(emp);
 //        employeePayrollList.add(new EmployeePayrollData(id, name, salary));

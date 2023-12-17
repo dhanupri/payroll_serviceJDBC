@@ -27,7 +27,7 @@ public class EmployeePayrollDBService {
                 int id=result.getInt("id");
                 String name=result.getString("name");
                 int salary=result.getInt("salary");
-                LocalDate startDate=result.getDate("start").toLocalDate();
+                Date startDate=result.getDate("start");
                 employeePayrollList.add(new EmployeePayrollData(id,name,salary,startDate));
             }
         } catch (SQLException e) {
@@ -56,7 +56,7 @@ public class EmployeePayrollDBService {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 int salary = resultSet.getInt("salary");
-                LocalDate startDate = resultSet.getDate("start").toLocalDate();
+                Date startDate = resultSet.getDate("start");
                 employeePayrollList.add(new EmployeePayrollData(id, name, salary, startDate));
             }
         } catch (SQLException e){
@@ -67,12 +67,13 @@ public class EmployeePayrollDBService {
     //insert values into table
     public void  insert(EmployeePayrollData emp) throws SQLException {
         Connection connection=sql_con.getCon();
-        PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?)");
+        PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?,?)");
         ps.setInt(1, emp.getId());
         ps.setString(2, emp.getName());
         ps.setInt(3,emp.getSalary());
         LocalDate d=emp.getStartDate();
         ps.setDate(4, Date.valueOf(d));
+        ps.setString(5,emp.getGender());
         int resultSet=ps.executeUpdate();
         connection.close();
 
@@ -159,7 +160,8 @@ public class EmployeePayrollDBService {
                 String name=resultSet.getString("name");
                 int salary=resultSet.getInt("salary");
                 java.util.Date date=resultSet.getDate("start");
-               System.out.println("ID:"+id+",Name:"+name+",salary:"+salary+",Date:"+date);
+                String gender=resultSet.getString("gender");
+               System.out.println("ID:"+id+",Name:"+name+",salary:"+salary+",Date:"+date+",Gender:"+gender);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
