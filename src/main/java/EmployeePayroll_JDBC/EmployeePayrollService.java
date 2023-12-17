@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.time.LocalDate;
 public class EmployeePayrollService {
+
+
+
     public enum IOService {CONSOLE_IO, FILE_IO, DB_IO, REST_IO}
     private List<EmployeePayrollData> employeePayrollList;
 //    LocalDate date=java.time.LocalDate.now();
@@ -108,8 +111,6 @@ public class EmployeePayrollService {
         int salary = consoleInputReader.nextInt();
         System.out.println("Enter the date:");
         String inputDate = consoleInputReader.next();
-
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date=dateFormat.parse(inputDate);
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
@@ -118,7 +119,6 @@ public class EmployeePayrollService {
         EmployeePayrollData emp = new EmployeePayrollData(id, name, salary, LocalDate.parse(inputDate),gender);
         employeePayrollList.add(emp);
         new EmployeePayrollDBService().insert(emp);
-//        employeePayrollList.add(new EmployeePayrollData(id, name, salary));
     }
     //update employee data
     public void updateEmployeedata(String name,int amt) throws SQLException {

@@ -65,7 +65,7 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
     //insert values into table
-    public void  insert(EmployeePayrollData emp) throws SQLException {
+    public static void  insert(EmployeePayrollData emp) throws SQLException {
         Connection connection=sql_con.getCon();
         PreparedStatement ps=connection.prepareStatement("INSERT INTO employee_payroll VALUES(?,?,?,?,?)");
         ps.setInt(1, emp.getId());
